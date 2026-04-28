@@ -19,7 +19,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_cache
     restart: unless-stopped
     volumes: *redis-volumes
-      
+
 
   db:
     env_file: .env
@@ -27,11 +27,11 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}_db
     restart: unless-stopped
     volumes: *postgres-volumes
-      
+
 
   superset:
     env_file: .env
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
       args:
@@ -48,7 +48,7 @@ services:
 
   superset-init:
     env_file: .env
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
       args:
@@ -67,7 +67,7 @@ services:
 
   superset-worker:
     env_file: .env
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
       args:
@@ -88,7 +88,7 @@ services:
 
   superset-worker-beat:
     env_file: .env
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
       args:
