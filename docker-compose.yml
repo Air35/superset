@@ -1,0 +1,104 @@
+x-superset-volumes:
+  &superset-volumes
+  - ./volumes/superset_home:/app/superset_home
+  - ./volumes/superset_config:/app/pythonpath
+  - ./volumes/superset_custom_assets:/app/superset/static/assets/superset_custom_assets
+
+x-redis-volumes:
+  &redis-volumes
+  - ./volumes/redis:/data
+
+x-postgres-volumes:
+  &postgres-volumes
+  - ./volumes/db_data:/var/lib/postgresql/data
+
+services:
+  redis:
+    env_file: .env
+    image: redis:7
+    container_name: ${COMPOSE_PROJECT_NAME}_cache
+    restart: unless-stopped
+    volumes: *redis-volumes
+      
+
+  db:
+    env_file: .env
+    image: postgres:16
+    container_name: ${COMPOSE_PROJECT_NAME}_db
+    restart: unless-stopped
+    volumes: *postgres-volumes
+      
+
+  superset:
+    env_file: .env
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SUPERSET_VERSION: ${SUPERSET_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_app
+    command: ["/app/docker/docker-bootstrap.sh", "app-gunicorn"]
+    restart: unless-stopped
+    ports:
+      - 8088:8088
+    depends_on:
+      superset-init:
+        condition: service_completed_successfully
+    volumes: *superset-volumes
+
+  superset-init:
+    env_file: .env
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SUPERSET_VERSION: ${SUPERSET_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_init
+    command: ["/app/docker/docker-init.sh"]
+    depends_on:
+      db:
+        condition: service_started
+      redis:
+        condition: service_started
+    restart: no
+    volumes: *superset-volumes
+    healthcheck:
+      disable: true
+
+  superset-worker:
+    env_file: .env
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SUPERSET_VERSION: ${SUPERSET_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_worker
+    command: ["/app/docker/docker-bootstrap.sh", "worker"]
+    restart: unless-stopped
+    depends_on:
+      superset-init:
+        condition: service_completed_successfully
+    volumes: *superset-volumes
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "celery -A superset.tasks.celery_app:app inspect ping -d celery@$$HOSTNAME",
+        ]
+
+  superset-worker-beat:
+    env_file: .env
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SUPERSET_VERSION: ${SUPERSET_VERSION}
+    container_name: ${COMPOSE_PROJECT_NAME}_worker_beat
+    command: ["/app/docker/docker-bootstrap.sh", "beat"]
+    restart: unless-stopped
+    depends_on:
+      superset-init:
+        condition: service_completed_successfully
+    volumes: *superset-volumes
+    healthcheck:
+      disable: true

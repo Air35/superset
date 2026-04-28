@@ -1,0 +1,20 @@
+FROM apache/superset:5.0.0
+
+# Set the working directory
+WORKDIR /app
+
+USER root
+
+RUN apt update; apt install gcc gpp -y
+
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    libmariadb-dev \
+    python3-dev \
+    build-essential
+
+COPY requirements.txt /tmp/requirements.txt
+
+RUN uv pip install -r /tmp/requirements.txt
+
+USER superset
