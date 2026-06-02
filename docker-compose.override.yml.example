@@ -1,0 +1,10 @@
+services:
+  superset:
+    ports: !reset []
+    networks:
+      - default
+      - proxy_network
+
+networks:
+  proxy_network:
+    external: true
