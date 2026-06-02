@@ -9,6 +9,9 @@ SUPERSET_ENV="$PROJECT_DIR/.env"
 SUPERSET_DOCKERFILE_EXAMPLE="$PROJECT_DIR/Dockerfile.example"
 SUPERSET_DOCKERFILE="$PROJECT_DIR/Dockerfile"
 
+SUPERSET_CONFIG_EXAMPLE="$PROJECT_DIR/superset_config_example.py"
+SUPERSET_CONFIG="$PROJECT_DIR/volumes/superset_config/superset_config.py"
+
 SUPERSET_DBPASS=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 32)
 SUPERSET_ADMIN_PASS=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 32)
 SUPERSET_SECRET=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 64)
@@ -36,5 +39,7 @@ sed -i "s/SUPERSET_SUPER_SECRET_KEY/$SUPERSET_SECRET/g" "$SUPERSET_ENV"
 sed -i "s/superset_cliente/$SUPERSET_CLIENTE/g" "$SUPERSET_ENV"
 
 cp "$SUPERSET_DOCKERFILE_EXAMPLE" "$SUPERSET_DOCKERFILE"
+
+cp "$SUPERSET_CONFIG_EXAMPLE" "$SUPERSET_CONFIG"
 
 sed -i "s/superset_version/$SUPERSET_VERSION/g" "$SUPERSET_DOCKERFILE"
