@@ -3,6 +3,9 @@
 #PROJECT_DIR=$(dirname "$PWD")
 PROJECT_DIR="$PWD"
 
+USER_UID=$(id -u)
+USER_GID=$(id -g)
+
 SUPERSET_EXAMPLE_ENV="$PROJECT_DIR/superset_env_example.conf"
 SUPERSET_ENV="$PROJECT_DIR/.env"
 
@@ -37,6 +40,8 @@ sed -i "s/superset_db_password/$SUPERSET_DBPASS/g" "$SUPERSET_ENV"
 sed -i "s/superset_admin_password/$SUPERSET_ADMIN_PASS/g" "$SUPERSET_ENV"
 sed -i "s/SUPERSET_SUPER_SECRET_KEY/$SUPERSET_SECRET/g" "$SUPERSET_ENV"
 sed -i "s/superset_cliente/$SUPERSET_CLIENTE/g" "$SUPERSET_ENV"
+sed -i "s/user_uid/$USER_UID/g" "$SUPERSET_ENV"
+sed -i "s/user_gid/$USER_GID/g" "$SUPERSET_ENV"
 
 cp "$SUPERSET_DOCKERFILE_EXAMPLE" "$SUPERSET_DOCKERFILE"
 
