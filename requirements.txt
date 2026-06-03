@@ -2,3 +2,6 @@ psycopg2-binary
 shillelagh[gsheetsapi]
 mysqlclient
 pymssql
+psycopg2
+clickhouse-connect>=0.13.0
+sqlalchemy-firebird>=0.7.0,<0.8
