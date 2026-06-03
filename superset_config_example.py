@@ -44,7 +44,7 @@ SQLALCHEMY_DATABASE_URI = (
     f"{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_DB}"
 )
 
-BABEL_DEFAULT_LOCALE = "pt_BR"
+BABEL_DEFAULT_LOCALE = os.getenv("SUPERSET_LANGUAGE", "pt_BR")
 
 LANGUAGES = {
     "pt": {"flag": "br", "name": "Português"},
