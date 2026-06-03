@@ -27,6 +27,7 @@ echo "Pasta do projeto: $PROJECT_DIR"
 echo "Senhas Geradas:"
 echo "Senha banco: $SUPERSET_DBPASS"
 echo "Senha api: $SUPERSET_SECRET"
+echo "Senha superset admin: $SUPERSET_ADMIN_PASS"
 
 echo "Informe o nome do Cliente:"
 read -r SUPERSET_CLIENTE
