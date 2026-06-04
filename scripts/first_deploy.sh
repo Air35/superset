@@ -16,7 +16,6 @@ SUPERSET_CONFIG_EXAMPLE="$PROJECT_DIR/superset_config_example.py"
 SUPERSET_CONFIG="$PROJECT_DIR/volumes/superset_config/superset_config.py"
 
 SUPERSET_DBPASS=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 32)
-SUPERSET_ADMIN_PASS=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 32)
 SUPERSET_SECRET=$(cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 64)
 SUPERSET_VERSION=5.0.0
 
@@ -27,7 +26,6 @@ echo "Pasta do projeto: $PROJECT_DIR"
 echo "Senhas Geradas:"
 echo "Senha banco: $SUPERSET_DBPASS"
 echo "Senha api: $SUPERSET_SECRET"
-echo "Senha superset admin: $SUPERSET_ADMIN_PASS"
 
 echo "Informe o nome do Cliente:"
 read -r SUPERSET_CLIENTE
@@ -38,7 +36,6 @@ read -r SUPERSET_VERSION
 cp "$SUPERSET_EXAMPLE_ENV" "$SUPERSET_ENV"
 
 sed -i "s/superset_db_password/$SUPERSET_DBPASS/g" "$SUPERSET_ENV"
-sed -i "s/superset_admin_password/$SUPERSET_ADMIN_PASS/g" "$SUPERSET_ENV"
 sed -i "s/SUPERSET_SUPER_SECRET_KEY/$SUPERSET_SECRET/g" "$SUPERSET_ENV"
 sed -i "s/superset_cliente/$SUPERSET_CLIENTE/g" "$SUPERSET_ENV"
 sed -i "s/user_uid/$USER_UID/g" "$SUPERSET_ENV"
