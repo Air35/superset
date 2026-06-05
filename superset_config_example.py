@@ -26,6 +26,7 @@ import sys
 
 from celery.schedules import crontab
 from flask_caching.backends.filesystemcache import FileSystemCache
+from superset.translations.utils import get_language_pack
 
 logger = logging.getLogger()
 
@@ -47,7 +48,7 @@ SQLALCHEMY_DATABASE_URI = (
 BABEL_DEFAULT_LOCALE = os.getenv("SUPERSET_LANGUAGE", "pt_BR")
 
 LANGUAGES = {
-    "pt": {"flag": "br", "name": "Português"},
+    "pt_BR": {"flag": "br", "name": "Português"},
     "en": {"flag": "us", "name": "English"},
 }
 
@@ -136,3 +137,11 @@ try:
     )
 except ImportError:
     logger.info("Using default Docker config...")
+
+def override_bootstrap_locale(data):
+    if data.get("locale") == "pt":
+        data["locale"] = "pt_BR"
+        data["language_pack"] = get_language_pack('pt_BR')
+    return data
+
+COMMON_BOOTSTRAP_OVERRIDES_FUNC = override_bootstrap_locale
