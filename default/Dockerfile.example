@@ -21,10 +21,10 @@ RUN uv pip install -r /tmp/requirements.txt
 
 RUN uv pip install -r /app/superset/translations/requirements.txt
 
-RUN pybabel compile -d /app/superset/translations \
-    && po2json /app/superset/translations/pt_BR/LC_MESSAGES/messages.po \
-       /app/superset/translations/pt_BR/LC_MESSAGES/messages.json \
-       --domain superset     --ignore-obsolete \
-       --format jed1.x
+#RUN pybabel compile -d /app/superset/translations \
+#    && po2json /app/superset/translations/pt_BR/LC_MESSAGES/messages.po \
+#       /app/superset/translations/pt_BR/LC_MESSAGES/messages.json \
+#       --domain superset     --ignore-obsolete \
+#       --format jed1.x
 
 USER superset
