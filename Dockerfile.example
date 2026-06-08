@@ -13,21 +13,18 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     build-essential
 
-COPY requirements.txt /tmp/requirements.txt
+COPY default/requirements.txt /tmp/requirements.txt
+
+COPY default/translations/pt_br-superset_version.po /app/superset/translations/pt_BR/LC_MESSAGES/messages.po
 
 RUN uv pip install -r /tmp/requirements.txt
 
 RUN uv pip install -r /app/superset/translations/requirements.txt
 
-#RUN mkdir -p /app/superset/translations/pt_BR/LC_MESSAGES && \
-#    curl -L \
-#    https://raw.githubusercontent.com/apache/superset/refs/heads/6.0/superset/translations/pt_BR/LC_MESSAGES/messages.po \
-#    -o /app/superset/translations/pt_BR/LC_MESSAGES/messages.po
-
-#RUN pybabel compile -d /app/superset/translations \
-#    && po2json /app/superset/translations/pt_BR/LC_MESSAGES/messages.po \
-#       /app/superset/translations/pt_BR/LC_MESSAGES/messages.json \
-#       --domain superset     --ignore-obsolete \
-#       --format jed1.x
+RUN pybabel compile -d /app/superset/translations \
+    && po2json /app/superset/translations/pt_BR/LC_MESSAGES/messages.po \
+       /app/superset/translations/pt_BR/LC_MESSAGES/messages.json \
+       --domain superset     --ignore-obsolete \
+       --format jed1.x
 
 USER superset
